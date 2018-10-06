@@ -31,9 +31,7 @@ extension RxSmartThrottleTests {
         let takeUntilTrigger = Observable<Void>.empty()
 
         let res = scheduler.start {
-            xs.throttle(dueTime: {
-                max($1 * 2, 100)
-            },
+            xs.throttle(dueTime: { max($1 * 2, 100) },
                         until: takeUntilTrigger,
                         latest: true,
                         scheduler: scheduler)
@@ -75,9 +73,7 @@ extension RxSmartThrottleTests {
         let takeUntilTrigger = Observable<Void>.empty()
 
         let res = scheduler.start {
-            xs.throttle(dueTime: {
-                max($1 * 2, 100)
-            },
+            xs.throttle(dueTime: { max($1 * 2, 100) },
                         until: takeUntilTrigger,
                         latest: false,
                         scheduler: scheduler)
@@ -121,9 +117,7 @@ extension RxSmartThrottleTests {
             ])
 
         let res = scheduler.start {
-            xs.throttle(dueTime: {
-                max($1 * 2, 100)
-            },
+            xs.throttle(dueTime: { max($1 * 2, 100) },
                         until: takeUntilTrigger,
                         latest: true,
                         scheduler: scheduler)
