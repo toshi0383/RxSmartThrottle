@@ -18,6 +18,7 @@ extension ObservableType {
      */
     public func throttle<O: ObservableType, U>(dueTime: @escaping (E, RxTimeInterval) -> RxTimeInterval, until: O, latest: Bool = false, scheduler: SchedulerType)
         -> Observable<E> where O.E == (U) {
+
             return Observable.create { (observer: AnyObserver<E>) -> Disposable in
                 let _until: Observable<U> = until.asObservable()
 
