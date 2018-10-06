@@ -9,7 +9,6 @@ final class RxSmartThrottleTests: XCTestCase {
         ("test_Throttle__customInterval__ExponentialBackoff", test_Throttle__customInterval__ExponentialBackoff),
         ("test_Throttle__customInterval__latest__false", test_Throttle__customInterval__latest__false),
         ("test_Throttle__customInterval__throttleUntil", test_Throttle__customInterval__throttleUntil),
-        ("testExample", testExample),
     ]
 }
 

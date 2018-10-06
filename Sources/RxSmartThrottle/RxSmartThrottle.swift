@@ -52,6 +52,8 @@ extension ObservableType {
                 }
 
                 let untilSubscription = _until.subscribe(onNext: { _ in
+                    _lock.lock(); defer { _lock.unlock() }
+
                     cancellable.disposable.dispose()
                     _currentDueTime = 0
                     _lastSentTime = nil
