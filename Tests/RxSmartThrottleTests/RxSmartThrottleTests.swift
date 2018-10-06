@@ -252,4 +252,39 @@ extension RxSmartThrottleTests {
 
         XCTAssertEqual(xs.subscriptions, subscriptions)
     }
+
+    func test_Throttle__error_on_until() {
+        let scheduler = TestScheduler(initialClock: 0)
+
+        let xs = scheduler.createHotObservable([
+            .next(120, 0),
+            .next(150, 1),
+            .next(210, 2),
+            .completed(250),
+            ])
+
+        let takeUntilTrigger = scheduler.createHotObservable([
+            Recorded<Event<Void>>.error(240, RxError.timeout),
+            ])
+
+        let res = scheduler.start {
+            xs.throttle(dueTime: { max($1 * 2, 100) },
+                        until: takeUntilTrigger,
+                        latest: true,
+                        scheduler: scheduler)
+        }
+
+        let correct = Recorded.events(
+            .next(210, 2),
+            .completed(250)
+        )
+
+        XCTAssertEqual(res.events, correct)
+
+        let subscriptions = [
+            Subscription(200, 250)
+        ]
+
+        XCTAssertEqual(xs.subscriptions, subscriptions)
+    }
 }
