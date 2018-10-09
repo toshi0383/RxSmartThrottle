@@ -124,7 +124,6 @@ extension RxSmartThrottleTests {
         let correct = Recorded.events(
             .next(210, 2),
             .next(310, 4),
-            .next(500, 5),
             .next(570, 6),
             .next(670, 7),
             .next(960, 8),
