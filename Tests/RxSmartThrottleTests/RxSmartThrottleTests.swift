@@ -25,7 +25,7 @@ extension RxSmartThrottleTests {
             .next(350, 5),
             .next(570, 6),
             .next(960, 7),
-            .completed(1000)
+            .completed(990)
             ])
 
         let takeUntilTrigger = Observable<Void>.empty()
@@ -41,15 +41,13 @@ extension RxSmartThrottleTests {
             .next(210, 2),
             .next(310, 4),
             .next(510, 5),
-            .next(710, 6),
-            .next(960, 7),
-            .completed(1000)
+            .next(910, 6)
         )
 
         XCTAssertEqual(res.events, correct)
 
         let subscriptions = [
-            Subscription(200, 1000)
+            Subscription(200, 990)
         ]
 
         XCTAssertEqual(xs.subscriptions, subscriptions)
@@ -116,7 +114,6 @@ extension RxSmartThrottleTests {
             .completed(1000)
             ])
 
-
         let res = scheduler.start {
             xs.throttle(dueTime: { max($1 * 2, 100) },
                         until: takeUntilTrigger,
@@ -127,6 +124,7 @@ extension RxSmartThrottleTests {
         let correct = Recorded.events(
             .next(210, 2),
             .next(310, 4),
+            .next(500, 5),
             .next(570, 6),
             .next(670, 7),
             .next(960, 8),

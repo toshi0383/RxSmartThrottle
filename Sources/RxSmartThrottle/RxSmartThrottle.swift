@@ -59,6 +59,12 @@ extension ObservableType {
                     cancellable.disposable.dispose()
                     _currentDueTime = 0
                     _lastSentTime = nil
+
+                    if latest, let element = _lastUnsentElement {
+                        sendNow(element: element)
+                    }
+
+                    _lastUnsentElement = nil
                 })
 
                 let subscription = self.subscribe({ event in
