@@ -104,12 +104,14 @@ extension ObservableType {
                         d.setDisposable(scheduler.scheduleRelative(0, dueTime: _currentDueTime - timeIntervalSinceLast, action: propagate))
                     case .error:
                         _lastUnsentElement = nil
+                        cancellable.dispose()
                         observer.on(event)
                     case .completed:
                         if let _ = _lastUnsentElement {
                             _completed = true
                         }
                         else {
+                            cancellable.dispose()
                             observer.onCompleted()
                         }
                     }
