@@ -42,6 +42,7 @@ extension ObservableType {
                     _lock.lock(); defer { _lock.unlock() }
 
                     if let lastUnsentElement = _lastUnsentElement {
+                        _currentDueTime = dueTime(lastUnsentElement, _currentDueTime)
                         sendNow(element: lastUnsentElement)
                     }
 
