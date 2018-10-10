@@ -11,16 +11,19 @@ extension ObservableType {
      - seealso: [debounce operator on reactivex.io](http://reactivex.io/documentation/operators/debounce.html)
 
      - parameter dueTime: Throttling duration for each element. Consulted after each next event for next throttle.
-     - parameter until: dueTime interval resets to 0 at each next event of this stream.
+     - parameter resetWhen: dueTime interval resets to 0 at each next event of this stream.
      - parameter latest: Should latest element received in a dueTime wide time window since last element emission be emitted.
      - parameter scheduler: Scheduler to run the throttle timers on.
      - returns: The throttled sequence.
      */
-    public func throttle<O: ObservableType, U>(dueTime: @escaping (E, RxTimeInterval) -> RxTimeInterval, until: O, latest: Bool = false, scheduler: SchedulerType)
+    public func throttle<O: ObservableType, U>(dueTime: @escaping (E, RxTimeInterval) -> RxTimeInterval,
+                                               resetWhen: O,
+                                               latest: Bool = false,
+                                               scheduler: SchedulerType)
         -> Observable<E> where O.E == (U) {
 
             return Observable.create { (observer: AnyObserver<E>) -> Disposable in
-                let _until: Observable<U> = until.asObservable()
+                let _resetWhen: Observable<U> = resetWhen.asObservable()
 
                 // state
                 var _lastUnsentElement: E? = nil
@@ -53,7 +56,7 @@ extension ObservableType {
                     return Disposables.create()
                 }
 
-                let untilSubscription = _until.subscribe(onNext: { _ in
+                let resetWhenSubscription = _resetWhen.subscribe(onNext: { _ in
                     _lock.lock(); defer { _lock.unlock() }
 
                     cancellable.disposable.dispose()
@@ -117,7 +120,7 @@ extension ObservableType {
                     }
                 })
 
-                return Disposables.create(subscription, untilSubscription)
+                return Disposables.create(subscription, resetWhenSubscription)
             }
     }
 }

@@ -28,11 +28,11 @@ extension RxSmartThrottleTests {
             .completed(990)
             ])
 
-        let takeUntilTrigger = Observable<Void>.empty()
+        let resetTrigger = Observable<Void>.empty()
 
         let res = scheduler.start {
             xs.throttle(dueTime: { max($1 * 2, 100) },
-                        until: takeUntilTrigger,
+                        resetWhen: resetTrigger,
                         latest: true,
                         scheduler: scheduler)
         }
@@ -68,11 +68,11 @@ extension RxSmartThrottleTests {
             .completed(1000)
             ])
 
-        let takeUntilTrigger = Observable<Void>.empty()
+        let resetTrigger = Observable<Void>.empty()
 
         let res = scheduler.start {
             xs.throttle(dueTime: { max($1 * 2, 100) },
-                        until: takeUntilTrigger,
+                        resetWhen: resetTrigger,
                         latest: false,
                         scheduler: scheduler)
         }
@@ -109,14 +109,14 @@ extension RxSmartThrottleTests {
             .completed(1000)
             ])
 
-        let takeUntilTrigger = scheduler.createHotObservable([
+        let resetTrigger = scheduler.createHotObservable([
             .next(500, 2),
             .completed(1000)
             ])
 
         let res = scheduler.start {
             xs.throttle(dueTime: { max($1 * 2, 100) },
-                        until: takeUntilTrigger,
+                        resetWhen: resetTrigger,
                         latest: true,
                         scheduler: scheduler)
         }
@@ -156,11 +156,11 @@ extension RxSmartThrottleTests {
             .completed(1000)
             ])
 
-        let takeUntilTrigger = Observable<Void>.empty()
+        let resetTrigger = Observable<Void>.empty()
 
         let res = scheduler.start {
             xs.throttle(dueTime: { max($1 * 2, 100) },
-                        until: takeUntilTrigger,
+                        resetWhen: resetTrigger,
                         latest: true,
                         scheduler: scheduler)
         }
@@ -193,11 +193,11 @@ extension RxSmartThrottleTests {
             .next(300, 5),
             ])
 
-        let takeUntilTrigger = Observable<Void>.empty()
+        let resetTrigger = Observable<Void>.empty()
 
         let res = scheduler.start {
             xs.throttle(dueTime: { max($1 * 2, 100) },
-                        until: takeUntilTrigger,
+                        resetWhen: resetTrigger,
                         latest: true,
                         scheduler: scheduler)
         }
@@ -227,11 +227,11 @@ extension RxSmartThrottleTests {
             .completed(250),
             ])
 
-        let takeUntilTrigger = Observable<Void>.empty()
+        let resetTrigger = Observable<Void>.empty()
 
         let res = scheduler.start {
             xs.throttle(dueTime: { max($1 * 2, 100) },
-                        until: takeUntilTrigger,
+                        resetWhen: resetTrigger,
                         latest: true,
                         scheduler: scheduler)
         }
@@ -250,7 +250,7 @@ extension RxSmartThrottleTests {
         XCTAssertEqual(xs.subscriptions, subscriptions)
     }
 
-    func test_Throttle__error_on_until() {
+    func test_Throttle__error_on_resetWhen() {
         let scheduler = TestScheduler(initialClock: 0)
 
         let xs = scheduler.createHotObservable([
@@ -260,13 +260,13 @@ extension RxSmartThrottleTests {
             .completed(250),
             ])
 
-        let takeUntilTrigger = scheduler.createHotObservable([
+        let resetTrigger = scheduler.createHotObservable([
             Recorded<Event<Void>>.error(240, RxError.timeout),
             ])
 
         let res = scheduler.start {
             xs.throttle(dueTime: { max($1 * 2, 100) },
-                        until: takeUntilTrigger,
+                        resetWhen: resetTrigger,
                         latest: true,
                         scheduler: scheduler)
         }

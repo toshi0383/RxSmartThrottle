@@ -6,7 +6,7 @@
 ```swift
 source
     .throttle(dueTime: { max($1 * 2, 1) }, // (E, RxTimeInterval) -> RxTimeInterval
-              until: takeUntilTrigger,     // Observable<U>
+              resetWhen: resetTrigger,     // Observable<U>
               latest: true,
               scheduler: scheduler)
     .disposed(by: disposeBag)
@@ -15,9 +15,9 @@ source
 With the parameters above,
 
 - throttle interval increases exponentially (1, 2, 4, 8...),
-- until the `until`'s next event.
+- until the `resetWhen`'s next event.
 
-After `until`, throttle interval is reset to 0 (meaning that next `source`'s event will be forwarded immediately)
+After `resetWhen`, throttle interval is reset to 0 (meaning that next `source`'s event will be forwarded immediately)
 
 # Install
 Copy paste source file to your project for now. 👌
